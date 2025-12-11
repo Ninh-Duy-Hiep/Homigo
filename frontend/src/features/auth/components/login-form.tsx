@@ -84,7 +84,7 @@ export function LoginForm() {
         <a href="#" className="hover:underline">Forgot password?</a>
       </div>
 
-      <Button disabled={isLoading} className="mt-6 w-full bg-[#512da8] hover:bg-[#5c6bc0] uppercase font-bold tracking-wider cursor-pointer">
+      <Button disabled={isLoading} className="mt-6 w-full bg-[#512da8] hover:bg-[#5c6bc0] uppercase font-bold tracking-wider cursor-pointer text-white">
         {isLoading ? "Processing..." : "Login"}
       </Button>
 

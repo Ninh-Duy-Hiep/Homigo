@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { useState } from "react";
+import { DashboardButton } from "./layout/DashboardButton";
 
 const PAGE_METADATA: Record<string, { title: string; description: string }> = {
   "/dashboard": {
@@ -44,6 +45,8 @@ export function Header() {
       </div>
 
       <div className="flex items-center gap-3 ">
+        <DashboardButton />
+        
         <Button variant="ghost" size="icon" onClick={toggleTheme} className="hidden md:flex relative cursor-pointer">
           <Sun className="h-6 w-6 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
 

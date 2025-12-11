@@ -51,7 +51,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           sessionStorage.setItem("user", userString);
         }
 
-        router.push("/dashboard");
+        router.push("/");
       } else {
         throw new Error(typeof res.message === "string" ? res.message : "Login failed");
       }

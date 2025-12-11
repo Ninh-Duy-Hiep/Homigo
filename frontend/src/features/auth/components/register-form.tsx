@@ -99,7 +99,7 @@ export function RegisterForm({ onSuccess, isActive }: RegisterFormProps) {
         )}
       </div>
 
-      <Button className="mt-6 w-full bg-[#512da8] hover:bg-[#5c6bc0] uppercase font-bold tracking-wider cursor-pointer">
+      <Button className="mt-6 w-full bg-[#512da8] hover:bg-[#5c6bc0] uppercase font-bold tracking-wider cursor-pointer text-white">
         Register
       </Button>
 

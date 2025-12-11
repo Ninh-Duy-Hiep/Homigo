@@ -4,6 +4,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 enum Role {
@@ -64,35 +65,43 @@ enum TranslationEntityType {
   USER_BIO
 }
 
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model User {
-  id                     Int        @id @default(autoincrement())
-  email                  String     @unique
-  password               String?
-  fullName               String     @map("full_name")
-  avatar                 String?    @db.VarChar(500)
-  bio                    String?    @db.Text
+  id                        String     @id @default(uuid())
+  email                     String     @unique
+  password                  String?
+  fullName                  String     @map("full_name")
+  avatar                    String?    @db.VarChar(500)
+  bio                       String?    @db.Text
   
-  role                   Role       @default(USER)
-  provider               Provider   @default(GOOGLE)
-  googleId               String?    @unique @map("google_id")
+  role                      Role       @default(USER)
+  provider                  Provider   @default(GOOGLE)
+  googleId                  String?    @unique @map("google_id")
   
-  hostStatus             HostStatus @default(NEW) @map("host_status")
-  phoneNumber            String?    @map("phone_number") @db.VarChar(20)
-  identityCardUrl        String?    @map("identity_card_url") @db.VarChar(500)
-  identityCardCloudinaryId String?  @map("identity_card_cloudinary_id")
-  rejectionReason        String?    @map("rejection_reason") @db.Text
+  hostStatus                HostStatus @default(NEW) @map("host_status")
+  phoneNumber               String?    @map("phone_number") @db.VarChar(20)
+  identityCardUrl           String?    @map("identity_card_url") @db.VarChar(500)
+  identityCardCloudinaryId  String?  @map("identity_card_cloudinary_id")
+  rejectionReason           String?    @map("rejection_reason") @db.Text
 
-  isActive               Boolean    @default(true) @map("is_active")
-  emailVerified          Boolean    @default(false) @map("email_verified")
-  lastLoginAt            DateTime?  @map("last_login_at")
-  createdAt              DateTime   @default(now()) @map("created_at")
-  updatedAt              DateTime   @default(now()) @updatedAt @map("updated_at")
+  isActive                  Boolean    @default(true) @map("is_active")
+  emailVerified             Boolean    @default(false) @map("email_verified")
+  lastLoginAt               DateTime?  @map("last_login_at")
+  createdAt                 DateTime   @default(now()) @map("created_at")
+  updatedAt                 DateTime   @default(now()) @updatedAt @map("updated_at")
 
-  rooms                  Room[]
-  bookings               Booking[]
-  reviews                Review[]
-  wishlists              Wishlist[]
-  notifications          Notification[]
+  rooms                     Room[]
+  bookings                  Booking[]
+  reviews                   Review[]
+  wishlists                 Wishlist[]
+  notifications             Notification[]
+
+  updateRequests            HostUpdateRequest[]
 
   @@map("users")
   @@index([email])
@@ -100,9 +109,28 @@ model User {
   @@index([hostStatus])
 }
 
+model HostUpdateRequest {
+  id          String        @id @default(uuid())
+  userId      String        @map("user_id")
+  
+  changes     Json          
+  
+  status      RequestStatus @default(PENDING)
+  adminNote   String?       @map("admin_note") @db.Text
+  
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @default(now()) @updatedAt @map("updated_at")
+
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("host_update_requests")
+  @@index([userId])
+  @@index([status])
+}
+
 model Room {
-  id                   Int           @id @default(autoincrement())
-  hostId               Int           @map("host_id")
+  id                   String        @id @default(uuid())
+  hostId               String        @map("host_id")
   
   title                String
   description          String        @db.Text
@@ -150,7 +178,7 @@ model Room {
 }
 
 model Amenity {
-  id            Int             @id @default(autoincrement())
+  id            String          @id @default(uuid())
   nameKey       String          @unique @map("name_key") @db.VarChar(100)
   icon          String?         @db.VarChar(50)
   category      AmenityCategory @default(BASIC)
@@ -161,8 +189,8 @@ model Amenity {
 }
 
 model RoomAmenity {
-  roomId    Int @map("room_id")
-  amenityId Int @map("amenity_id")
+  roomId    String @map("room_id")
+  amenityId String @map("amenity_id")
 
   room    Room    @relation(fields: [roomId], references: [id], onDelete: Cascade)
   amenity Amenity @relation(fields: [amenityId], references: [id], onDelete: Cascade)
@@ -172,9 +200,9 @@ model RoomAmenity {
 }
 
 model Booking {
-  id                    Int           @id @default(autoincrement())
-  roomId                Int           @map("room_id")
-  guestId               Int           @map("guest_id")
+  id                    String        @id @default(uuid())
+  roomId                String        @map("room_id")
+  guestId               String        @map("guest_id")
   
   checkInDate           DateTime      @map("check_in_date") @db.Date
   checkOutDate          DateTime      @map("check_out_date") @db.Date
@@ -208,10 +236,10 @@ model Booking {
 }
 
 model Review {
-  id                  Int       @id @default(autoincrement())
-  bookingId           Int       @unique @map("booking_id")
-  roomId              Int       @map("room_id")
-  reviewerId          Int       @map("reviewer_id")
+  id                  String    @id @default(uuid())
+  bookingId           String    @unique @map("booking_id")
+  roomId              String    @map("room_id")
+  reviewerId          String    @map("reviewer_id")
   
   rating              Int
   cleanlinessRating   Int?      @map("cleanliness_rating")
@@ -238,9 +266,9 @@ model Review {
 }
 
 model Wishlist {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @map("user_id")
-  roomId    Int      @map("room_id")
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  roomId    String   @map("room_id")
   createdAt DateTime @default(now()) @map("created_at")
 
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -252,8 +280,8 @@ model Wishlist {
 }
 
 model Notification {
-  id            Int              @id @default(autoincrement())
-  userId        Int              @map("user_id")
+  id            String           @id @default(uuid())
+  userId        String           @map("user_id")
   type          NotificationType
   titleKey      String           @map("title_key")
   messageKey    String           @map("message_key")
@@ -270,9 +298,9 @@ model Notification {
 }
 
 model Translation {
-  id              Int                   @id @default(autoincrement())
+  id              String                @id @default(uuid())
   entityType      TranslationEntityType @map("entity_type")
-  entityId        Int                   @map("entity_id")
+  entityId        String                @map("entity_id")
   fieldName       String                @map("field_name") @db.VarChar(50)
   languageCode    String                @map("language_code") @db.VarChar(5)
   translatedText  String                @map("translated_text") @db.Text

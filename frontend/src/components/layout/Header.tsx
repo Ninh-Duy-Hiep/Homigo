@@ -6,9 +6,9 @@ import { useAuth } from "@/features/auth/hooks/use-auth";
 import { Bell, ChevronDown, LogOut, Moon, Sun, User as UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { useState } from "react";
-import { DashboardButton } from "./layout/DashboardButton";
+import { DashboardButton } from "./DashboardButton";
 
 const PAGE_METADATA: Record<string, { title: string; description: string }> = {
   "/dashboard": {

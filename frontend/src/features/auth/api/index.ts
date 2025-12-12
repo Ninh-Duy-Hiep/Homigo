@@ -1,17 +1,16 @@
 import api from "@/lib/axios";
 import { ApiResponse } from "@/types/api";
-import { LoginResponse } from "../types";
-import { LoginSchemaType, RegisterSchemaType } from "../types/schema";
+import { LoginSchemaType, RegisterGuestSchemaType } from "../types/schema";
+import { AuthResponse } from "../types";
 
 export const authApi = {
   login: async (data: LoginSchemaType) => {
-    const response = await api.post<ApiResponse<LoginResponse>>("/auth/login", data);
+    const response = await api.post<ApiResponse<AuthResponse>>("/auth/login", data);
     return response.data;
   },
 
-//   register: async (data: RegisterSchemaType) => {
-//     const { confirmPassword, ...registerData } = data;
-//     const response = await api.post<ApiResponse<User>>("/auth/register", registerData);
-//     return response.data;
-//   },
+  registerGuest: async (data: RegisterGuestSchemaType) => {
+    const response = await api.post<ApiResponse<AuthResponse>>("/auth/register/guest", data);
+    return response.data;
+  },
 };

@@ -4,7 +4,7 @@ import {
   IsNotEmpty,
   IsString,
   MinLength,
-  IsPhoneNumber,
+  // IsPhoneNumber,
   Matches,
   IsOptional,
 } from 'class-validator';
@@ -41,7 +41,7 @@ export class RegisterHostDto {
   @ApiProperty({ example: '0123456789' })
   @IsString()
   @IsNotEmpty({ message: 'Số điện thoại không được để trống' })
-  @IsPhoneNumber('VN', { message: 'Số điện thoại không hợp lệ' })
+  // @IsPhoneNumber('VN', { message: 'Số điện thoại không hợp lệ' })
   phoneNumber: string;
 
   @ApiProperty({ example: 'https://cloudinary.com/cccd-mat-truoc.jpg' })

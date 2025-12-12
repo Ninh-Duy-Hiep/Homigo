@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
   IsNotEmpty,
-  IsPhoneNumber,
+  // IsPhoneNumber,
   IsString,
   Matches,
   MinLength,
@@ -32,6 +32,6 @@ export class RegisterGuestDto {
   @ApiProperty({ example: '0123456789' })
   @IsString()
   @IsNotEmpty({ message: 'Số điện thoại không được để trống' })
-  @IsPhoneNumber('VN', { message: 'Số điện thoại không hợp lệ' })
+  // @IsPhoneNumber('VN', { message: 'Số điện thoại không hợp lệ' })
   phoneNumber: string;
 }

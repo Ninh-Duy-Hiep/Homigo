@@ -1,49 +1,40 @@
-'use client';
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { LoginForm } from '@/features/auth/components/login-form';
-import { RegisterForm } from '@/features/auth/components/register-form';
+"use client";
+
+import { useState } from "react";
+import { LoginForm } from "@/features/auth/components/LoginForm";
+import { RegisterGuestForm } from "@/features/auth/components/RegisterGuestForm";
+import { motion, AnimatePresence } from "motion/react";
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
-      <div className="w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-xl">
-        <div className="flex bg-gray-200 p-1">
-          <button
-            onClick={() => setIsLogin(true)}
-            className={`flex-1 rounded-xl py-2 text-sm font-medium transition-all ${
-              isLogin ? 'bg-white shadow text-blue-600' : 'text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            Đăng nhập
-          </button>
-          <button
-            onClick={() => setIsLogin(false)}
-            className={`flex-1 rounded-xl py-2 text-sm font-medium transition-all ${
-              !isLogin ? 'bg-white shadow text-green-600' : 'text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            Đăng ký
-          </button>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg">
+        <div className="text-center">
+          <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+            {isLogin ? "Chào mừng trở lại!" : "Tạo tài khoản mới"}
+          </h2>
+          <p className="mt-2 text-sm text-gray-600">
+            {isLogin ? "Chưa có tài khoản? " : "Đã có tài khoản? "}
+            <button onClick={() => setIsLogin(!isLogin)} className="font-medium text-blue-600 hover:text-blue-500">
+              {isLogin ? "Đăng ký ngay" : "Đăng nhập"}
+            </button>
+          </p>
         </div>
 
-        <div className="p-8">
-          <h2 className="mb-6 text-center text-2xl font-bold text-gray-800">
-            {isLogin ? 'Chào mừng trở lại!' : 'Tạo tài khoản mới'}
-          </h2>
-
+        <div className="mt-8">
+          {/* Sử dụng AnimatePresence để tạo hiệu ứng chuyển đổi mượt mà */}
           <AnimatePresence mode="wait">
-            <motion.div
-              key={isLogin ? 'login' : 'register'}
-              initial={{ opacity: 0, x: isLogin ? -20 : 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: isLogin ? 20 : -20 }}
-              transition={{ duration: 0.2 }}
-            >
-              {isLogin ? <LoginForm /> : <RegisterForm />}
-            </motion.div>
+            {isLogin ? (
+              <motion.div key="login" exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.2 }}>
+                <LoginForm />
+              </motion.div>
+            ) : (
+              <motion.div key="register" exit={{ opacity: 0, x: 20 }} transition={{ duration: 0.2 }}>
+                <RegisterGuestForm />
+              </motion.div>
+            )}
           </AnimatePresence>
         </div>
       </div>

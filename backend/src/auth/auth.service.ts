@@ -36,15 +36,39 @@ export class AuthService {
 
     const hashedPassword = await bcrypt.hash(dto.password, 10);
 
-    return this.prisma.user.create({
+    const newUser = await this.prisma.user.create({
       data: {
         email: dto.email,
         password: hashedPassword,
         fullName: dto.fullName,
+        phoneNumber: dto.phoneNumber,
         role: Role.USER,
         hostStatus: HostStatus.NEW,
+        provider: Provider.LOCAL,
       },
     });
+
+    const token = await this.signToken({
+      userId: newUser.id,
+      email: newUser.email,
+      fullName: newUser.fullName,
+      avatar: newUser.avatar,
+      phoneNumber: newUser.phoneNumber,
+      role: newUser.role,
+    });
+
+    return {
+      message: 'Đăng ký thành công',
+      user: {
+        id: newUser.id,
+        email: newUser.email,
+        fullName: newUser.fullName,
+        role: newUser.role,
+        avatar: newUser.avatar,
+        hostStatus: newUser.hostStatus,
+      },
+      accessToken: token.accessToken,
+    };
   }
 
   async registerHost(dto: RegisterHostDto) {
@@ -55,7 +79,7 @@ export class AuthService {
 
     const hashedPassword = await bcrypt.hash(dto.password, 10);
 
-    return this.prisma.user.create({
+    const newUser = await this.prisma.user.create({
       data: {
         email: dto.email,
         password: hashedPassword,
@@ -63,10 +87,33 @@ export class AuthService {
         bio: dto.bio,
         phoneNumber: dto.phoneNumber,
         identityCardUrl: dto.identityCardUrl,
-        role: Role.USER,
+        role: Role.HOST,
         hostStatus: HostStatus.PENDING,
+        provider: Provider.LOCAL,
       },
     });
+
+    const token = await this.signToken({
+      userId: newUser.id,
+      email: newUser.email,
+      fullName: newUser.fullName,
+      avatar: newUser.avatar,
+      phoneNumber: newUser.phoneNumber,
+      role: newUser.role,
+    });
+
+    return {
+      message: 'Đăng ký trờ thành chủ nhà thành công, vui lòng chờ xét duyệt',
+      user: {
+        id: newUser.id,
+        email: newUser.email,
+        fullName: newUser.fullName,
+        role: newUser.role,
+        avatar: newUser.avatar,
+        hostStatus: newUser.hostStatus,
+      },
+      accessToken: token.accessToken,
+    };
   }
 
   async login(dto: LoginDto) {
@@ -78,9 +125,9 @@ export class AuthService {
 
     const isMatch = await bcrypt.compare(dto.password, user.password);
     if (!isMatch)
-      throw new UnauthorizedException('Thông tin đăng nhập không hợp lệ');
+      throw new UnauthorizedException('Đăng nhập sai email hoặc mật khẩu');
 
-    return this.signToken({
+    const token = await this.signToken({
       userId: user.id,
       email: user.email,
       fullName: user.fullName,
@@ -88,6 +135,19 @@ export class AuthService {
       phoneNumber: user.phoneNumber,
       role: user.role,
     });
+
+    return {
+      message: 'Đăng nhập thành công',
+      user: {
+        id: user.id,
+        email: user.email,
+        fullName: user.fullName,
+        role: user.role,
+        avatar: user.avatar,
+        hostStatus: user.hostStatus,
+      },
+      accessToken: token.accessToken,
+    };
   }
 
   async googleLogin(req: { user: GoogleUser }) {

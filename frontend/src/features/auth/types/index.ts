@@ -1,21 +1,38 @@
-export interface LoginResponse {
-  accessToken: string;
-  user: User;
-}
-export interface User {
-  id: string;
-  email: string;
-  name?: string;
-  role: 'ADMIN' | 'HOST' | 'GUEST';
-}
-
-export interface AuthResponse {
-  accessToken: string;
-  refreshToken: string; // Nếu có
-  user: User;
-}
+import { HostStatus } from "@/constants/enum";
 
 export interface LoginPayload {
   email: string;
-  password?: string; // Optional vì login Google không cần pass
+  password: string;
+  rememberMe: boolean;
+}
+
+export interface RegisterGuestPayload {
+  email: string;
+  password: string;
+  fullName: string;
+  phoneNumber: string;
+}
+
+export interface RegisterHostPayload {
+  email: string;
+  password: string;
+  fullName: string;
+  bio?: string;
+  phoneNumber: string;
+  indentityCardUrl: string;
+}
+
+export interface AuthResponse {
+  message: string;
+  user: UserAuth;
+  accessToken: string;
+}
+
+export interface UserAuth {
+  id: string;
+  email: string;
+  fullName: string;
+  role: string;
+  avatar: string | null;
+  hostStatus: HostStatus;
 }

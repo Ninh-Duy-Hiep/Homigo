@@ -17,6 +17,7 @@ const mockDestinations: Destination[] = [
   { id: 1, name: "Hạ Long Bay", image: "", price: "2.000.000đ" },
   { id: 2, name: "Đà Lạt", image: "", price: "1.500.000đ" },
   { id: 3, name: "Phú Quốc", image: "", price: "3.000.000đ" },
+  { id: 4, name: "Phú Quốc", image: "", price: "3.000.000đ" },
 ];
 
 const fetchDestinations = async (): Promise<Destination[]> => {
@@ -37,11 +38,11 @@ export default function HomePage() {
   if (error) return <div>Lỗi tải dữ liệu</div>;
 
   return (
-    <main className="container mx-auto min-h-screen p-4 py-8">
+    <main className="mx-auto min-h-screen p-4">
       <Header />
       <h1 className="mb-8 text-3xl font-bold text-gray-800">Khám phá điểm đến</h1>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {data?.map((dest, index) => (
           <motion.div
             key={dest.id}

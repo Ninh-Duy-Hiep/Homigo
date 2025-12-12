@@ -22,41 +22,42 @@ export const useAuthStore = create<AuthState>((set) => ({
 
     if (rememberMe) {
       localStorage.setItem("accessToken", token);
-      localStorage.setItem("user", userStr);
+      localStorage.setItem("homigo-auth", userStr);
 
       sessionStorage.removeItem("accessToken");
-      sessionStorage.removeItem("user");
+      sessionStorage.removeItem("homigo-auth");
     } else {
       sessionStorage.setItem("accessToken", token);
-      sessionStorage.setItem("user", userStr);
+      sessionStorage.setItem("homigo-auth", userStr);
 
       localStorage.removeItem("accessToken");
-      localStorage.removeItem("user");
+      localStorage.removeItem("homigo-auth");
     }
   },
 
   logout: () => {
     set({ user: null, token: null, isAuthenticated: false });
     localStorage.removeItem("accessToken");
-    localStorage.removeItem("user");
+    localStorage.removeItem("homigo-auth");
 
     sessionStorage.removeItem("accessToken");
-    sessionStorage.removeItem("user");
+    sessionStorage.removeItem("homigo-auth");
   },
 
   initialize: () => {
     if (typeof window === "undefined") return;
 
     const token = localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken");
-    const userStr = localStorage.getItem("user") || sessionStorage.getItem("user");
+    const userStr = localStorage.getItem("homigo-auth") || sessionStorage.getItem("homigo-auth");
 
     if (token && userStr) {
       try {
         const user = JSON.parse(userStr);
         set({ user, token, isAuthenticated: true });
-      } catch (e) {
-        localStorage.removeItem("user");
-        sessionStorage.removeItem("user");
+      } catch (error) {
+        console.error("Failed to parse user from storage:", error);
+        localStorage.removeItem("homigo-auth");
+        sessionStorage.removeItem("homigo-auth");
       }
     }
   },

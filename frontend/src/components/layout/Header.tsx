@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { motion } from "motion/react"; 
-import { LogOut, User } from "lucide-react";
+import { LogOut} from "lucide-react";
 
 export const Header = () => {
   const { isAuthenticated, user, logout } = useAuthStore();
@@ -11,7 +11,7 @@ export const Header = () => {
   const handleLogout = () => {
     logout();
     localStorage.removeItem("accessToken");
-    window.location.href = "/auth";
+    window.location.href = "/";
   };
 
   return (
@@ -20,7 +20,7 @@ export const Header = () => {
       animate={{ y: 0 }}
       className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md"
     >
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
+      <div className="mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
         <Link href="/" className="text-2xl font-bold text-blue-600">
           Homigo

@@ -11,6 +11,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/login.dto';
 import { Role, HostStatus, Provider } from '@prisma/client';
+import { JwtPayload } from './strategies/jwt.strategy';
 
 interface GoogleUser {
   email: string;
@@ -59,9 +60,9 @@ export class AuthService {
         email: dto.email,
         password: hashedPassword,
         fullName: dto.fullName,
+        bio: dto.bio,
         phoneNumber: dto.phoneNumber,
         identityCardUrl: dto.identityCardUrl,
-        bio: dto.bio,
         role: Role.USER,
         hostStatus: HostStatus.PENDING,
       },
@@ -79,7 +80,14 @@ export class AuthService {
     if (!isMatch)
       throw new UnauthorizedException('Thông tin đăng nhập không hợp lệ');
 
-    return this.signToken(user.id, user.email, user.role);
+    return this.signToken({
+      userId: user.id,
+      email: user.email,
+      fullName: user.fullName,
+      avatar: user.avatar,
+      phoneNumber: user.phoneNumber,
+      role: user.role,
+    });
   }
 
   async googleLogin(req: { user: GoogleUser }) {
@@ -110,7 +118,14 @@ export class AuthService {
       }
     }
 
-    const token = await this.signToken(user.id, user.email, user.role);
+    const token = await this.signToken({
+      userId: user.id,
+      email: user.email,
+      fullName: user.fullName,
+      avatar: user.avatar,
+      phoneNumber: user.phoneNumber,
+      role: user.role,
+    });
     return {
       message: 'Đăng nhập thành công',
       user,
@@ -118,8 +133,15 @@ export class AuthService {
     };
   }
 
-  private async signToken(userId: string, email: string, role: string) {
-    const payload = { sub: userId, email, role };
+  private async signToken(data: JwtPayload) {
+    const payload = {
+      userId: data.userId,
+      email: data.email,
+      fullName: data.fullName,
+      avatar: data.avatar,
+      phoneNumber: data.phoneNumber,
+      role: data.role,
+    };
     return {
       accessToken: await this.jwtService.signAsync(payload),
     };

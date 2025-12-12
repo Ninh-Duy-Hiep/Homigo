@@ -86,7 +86,7 @@ model User {
   hostStatus                HostStatus @default(NEW) @map("host_status")
   phoneNumber               String?    @map("phone_number") @db.VarChar(20)
   identityCardUrl           String?    @map("identity_card_url") @db.VarChar(500)
-  identityCardCloudinaryId  String?  @map("identity_card_cloudinary_id")
+  identityCardCloudinaryId  String?    @map("identity_card_cloudinary_id")
   rejectionReason           String?    @map("rejection_reason") @db.Text
 
   isActive                  Boolean    @default(true) @map("is_active")
@@ -104,9 +104,10 @@ model User {
   updateRequests            HostUpdateRequest[]
 
   @@map("users")
-  @@index([email])
-  @@index([googleId])
   @@index([hostStatus])
+  @@index([role, createdAt])
+  @@index([role, isActive])
+  @@index([fullName])
 }
 
 model HostUpdateRequest {

@@ -1,18 +1,37 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsPhoneNumber,
+  IsString,
+  Matches,
+  MinLength,
+} from 'class-validator';
 
 export class RegisterGuestDto {
   @ApiProperty({ example: 'guest@example.com' })
-  @IsEmail()
+  @IsNotEmpty({ message: 'Email không được để trống' })
+  @IsEmail({}, { message: 'Email không hợp lệ, vui lòng nhập đúng định dạng' })
   email: string;
 
-  @ApiProperty({ example: '123456' })
+  @ApiProperty({ example: '@abc123' })
   @IsString()
-  @MinLength(6)
+  @IsNotEmpty({ message: 'Mật khẩu không được để trống' })
+  @MinLength(8, { message: 'Mật khẩu phải có ít nhất 8 kí tự' })
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).+$/, {
+    message:
+      'Mật khẩu phải chứa ít nhất 1 chữ thường, 1 chữ hoa và 1 ký tự đặc biệt',
+  })
   password: string;
 
   @ApiProperty({ example: 'Nguyen Van A' })
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Họ và tên không được để trống' })
   fullName: string;
+
+  @ApiProperty({ example: '0123456789' })
+  @IsString()
+  @IsNotEmpty({ message: 'Số điện thoại không được để trống' })
+  @IsPhoneNumber('VN', { message: 'Số điện thoại không hợp lệ' })
+  phoneNumber: string;
 }

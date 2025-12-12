@@ -8,6 +8,7 @@ import {
   Req,
   UseInterceptors,
   ClassSerializerInterceptor,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import {
@@ -19,13 +20,12 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
+import { JwtPayload } from 'src/auth/strategies/jwt.strategy';
+import { FilterGuestDto } from './dto/filter-guest.dto';
+import { FilterHostDto } from './dto/filter-host.dto';
 
 interface RequestWithUser {
-  user: {
-    userId: string;
-    email: string;
-    role: string;
-  };
+  user: JwtPayload;
 }
 
 @ApiTags('Users')
@@ -35,6 +35,28 @@ interface RequestWithUser {
 @UseInterceptors(ClassSerializerInterceptor)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @Get('guests')
+  @ApiOperation({ summary: 'Lấy danh sách Guests' })
+  async getAllGuests(@Query() filter: FilterGuestDto) {
+    const result = await this.usersService.getAllGuests(filter);
+
+    return {
+      ...result,
+      data: result.data.map((user) => new UserEntity(user)),
+    };
+  }
+
+  @Get('hosts')
+  @ApiOperation({ summary: 'Lấy danh sách Hosts' })
+  async getAllHosts(@Query() filter: FilterHostDto) {
+    const result = await this.usersService.getAllHosts(filter);
+
+    return {
+      ...result,
+      data: result.data.map((user) => new UserEntity(user)),
+    };
+  }
 
   @Get('profile')
   @ApiOperation({ summary: 'Lấy thông tin cá nhân' })

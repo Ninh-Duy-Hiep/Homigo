@@ -3,10 +3,96 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Role, HostStatus, RequestStatus, Prisma } from '@prisma/client';
+import { FilterGuestDto } from './dto/filter-guest.dto';
+import { FilterHostDto } from './dto/filter-host.dto';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
+
+  async getAllGuests(filter: FilterGuestDto) {
+    const { page = 1, limit = 10, searchName, isActive } = filter;
+    const skip = (page - 1) * limit;
+
+    const where: Prisma.UserWhereInput = {
+      role: Role.USER,
+      ...(searchName
+        ? {
+            fullName: {
+              contains: searchName,
+            },
+          }
+        : {}),
+      ...(isActive !== undefined ? { isActive: isActive } : {}),
+    };
+
+    const [guests, total] = await Promise.all([
+      this.prisma.user.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          _count: {
+            select: { bookings: true, reviews: true, wishlists: true }, // Count the number of bookings, reviews, and wishlists.
+          },
+        },
+      }),
+      this.prisma.user.count({ where }),
+    ]);
+
+    return {
+      data: guests,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
+  }
+
+  async getAllHosts(filter: FilterHostDto) {
+    const { page = 1, limit = 10, searchName, hostStatus } = filter;
+    const skip = (page - 1) * limit;
+
+    const where: Prisma.UserWhereInput = {
+      role: Role.HOST,
+      ...(searchName
+        ? {
+            fullName: {
+              contains: searchName,
+            },
+          }
+        : {}),
+      ...(hostStatus !== undefined ? { hostStatus: hostStatus } : {}),
+    };
+
+    const [hosts, total] = await Promise.all([
+      this.prisma.user.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          _count: {
+            select: { rooms: true }, // Count the number of rooms.
+          },
+        },
+      }),
+      this.prisma.user.count({ where }),
+    ]);
+
+    return {
+      data: hosts,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
+  }
 
   async getProfile(userId: string) {
     const user = await this.prisma.user.findUnique({

@@ -5,6 +5,7 @@ import { UsersSeeder } from './database/seeds/users.seeder';
 import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 import { AuthModule } from './auth/auth.module';
 import * as path from 'path';
+import { UsersModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import * as path from 'path';
       ],
     }),
     AuthModule,
+    UsersModule,
   ],
   providers: [PrismaService, SeedService, UsersSeeder],
 })

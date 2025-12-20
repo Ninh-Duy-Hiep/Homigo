@@ -1,0 +1,317 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  HOST
+  ADMIN
+}
+
+enum Provider {
+  LOCAL
+  GOOGLE
+}
+
+enum HostStatus {
+  NEW
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum PropertyType {
+  APARTMENT
+  HOUSE
+  VILLA
+  HOTEL
+  STUDIO
+}
+
+enum AmenityCategory {
+  BASIC
+  FACILITY
+  SAFETY
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum PaymentStatus {
+  UNPAID
+  PAID
+  REFUNDED
+}
+
+enum NotificationType {
+  BOOKING
+  REVIEW
+  HOST_APPROVAL
+  PAYMENT
+  SYSTEM
+}
+
+enum TranslationEntityType {
+  ROOM
+  USER_BIO
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id                        String     @id @default(uuid())
+  email                     String     @unique
+  password                  String?
+  fullName                  String     @map("full_name")
+  avatar                    String?    @db.VarChar(500)
+  bio                       String?    @db.Text
+  
+  role                      Role       @default(USER)
+  provider                  Provider   @default(GOOGLE)
+  googleId                  String?    @unique @map("google_id")
+  
+  hostStatus                HostStatus @default(NEW) @map("host_status")
+  phoneNumber               String?    @map("phone_number") @db.VarChar(20)
+  identityCardUrl           String?    @map("identity_card_url") @db.VarChar(500)
+  identityCardCloudinaryId  String?    @map("identity_card_cloudinary_id")
+  rejectionReason           String?    @map("rejection_reason") @db.Text
+
+  isActive                  Boolean    @default(true) @map("is_active")
+  emailVerified             Boolean    @default(false) @map("email_verified")
+  lastLoginAt               DateTime?  @map("last_login_at")
+  createdAt                 DateTime   @default(now()) @map("created_at")
+  updatedAt                 DateTime   @default(now()) @updatedAt @map("updated_at")
+
+  rooms                     Room[]
+  bookings                  Booking[]
+  reviews                   Review[]
+  wishlists                 Wishlist[]
+  notifications             Notification[]
+
+  updateRequests            HostUpdateRequest[]
+
+  @@map("users")
+  @@index([hostStatus])
+  @@index([role, createdAt])
+  @@index([role, isActive])
+  @@index([fullName])
+}
+
+model HostUpdateRequest {
+  id          String        @id @default(uuid())
+  userId      String        @map("user_id")
+  
+  changes     Json          
+  
+  status      RequestStatus @default(PENDING)
+  adminNote   String?       @map("admin_note") @db.Text
+  
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @default(now()) @updatedAt @map("updated_at")
+
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("host_update_requests")
+  @@index([userId])
+  @@index([status])
+}
+
+model Room {
+  id                   String        @id @default(uuid())
+  hostId               String        @map("host_id")
+  
+  title                String
+  description          String        @db.Text
+  propertyType         PropertyType  @default(APARTMENT) @map("property_type")
+  
+  pricePerNight        Decimal       @map("price_per_night") @db.Decimal(10, 2)
+  cleaningFee          Decimal?      @default(0) @map("cleaning_fee") @db.Decimal(10, 2)
+  serviceFeePercentage Decimal?      @default(10.00) @map("service_fee_percentage") @db.Decimal(5, 2)
+  maxGuests            Int           @default(1) @map("max_guests")
+  bedrooms             Int           @default(1)
+  beds                 Int           @default(1)
+  bathrooms            Int           @default(1)
+  
+  address              String
+  city                 String        @db.VarChar(100)
+  state                String?       @db.VarChar(100)
+  country              String        @db.VarChar(100)
+  postalCode           String?       @map("postal_code") @db.VarChar(20)
+  latitude             Decimal?      @db.Decimal(10, 8)
+  longitude            Decimal?      @db.Decimal(11, 8)
+  
+  images               Json          
+  imageCloudinaryIds   Json?         @map("image_cloudinary_ids")
+  instantBooking       Boolean       @default(false) @map("instant_booking")
+  minimumNights        Int           @default(1) @map("minimum_nights")
+  maximumNights        Int           @default(365) @map("maximum_nights")
+  
+  isPublished          Boolean       @default(true) @map("is_published")
+  isActive             Boolean       @default(true) @map("is_active")
+  
+  createdAt            DateTime      @default(now()) @map("created_at")
+  updatedAt            DateTime      @default(now()) @updatedAt @map("updated_at")
+
+  host                 User          @relation(fields: [hostId], references: [id], onDelete: Cascade)
+  roomAmenities        RoomAmenity[]
+  bookings             Booking[]
+  reviews              Review[]
+  wishlists            Wishlist[]
+
+  @@map("rooms")
+  @@index([hostId])
+  @@index([city])
+  @@index([pricePerNight])
+  @@index([isPublished, isActive])
+}
+
+model Amenity {
+  id            String          @id @default(uuid())
+  nameKey       String          @unique @map("name_key") @db.VarChar(100)
+  icon          String?         @db.VarChar(50)
+  category      AmenityCategory @default(BASIC)
+
+  roomAmenities RoomAmenity[]
+
+  @@map("amenities")
+}
+
+model RoomAmenity {
+  roomId    String @map("room_id")
+  amenityId String @map("amenity_id")
+
+  room    Room    @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  amenity Amenity @relation(fields: [amenityId], references: [id], onDelete: Cascade)
+
+  @@id([roomId, amenityId])
+  @@map("room_amenities")
+}
+
+model Booking {
+  id                    String        @id @default(uuid())
+  roomId                String        @map("room_id")
+  guestId               String        @map("guest_id")
+  
+  checkInDate           DateTime      @map("check_in_date") @db.Date
+  checkOutDate          DateTime      @map("check_out_date") @db.Date
+  numberOfGuests        Int           @map("number_of_guests")
+  numberOfNights        Int           @map("number_of_nights")
+  
+  subtotal              Decimal       @db.Decimal(10, 2)
+  cleaningFee           Decimal?      @default(0) @map("cleaning_fee") @db.Decimal(10, 2)
+  serviceFee            Decimal       @map("service_fee") @db.Decimal(10, 2)
+  totalPrice            Decimal       @map("total_price") @db.Decimal(10, 2)
+  
+  status                BookingStatus @default(PENDING)
+  paymentStatus         PaymentStatus @default(UNPAID) @map("payment_status")
+  stripePaymentIntentId String?       @unique @map("stripe_payment_intent_id")
+  
+  specialRequests       String?       @map("special_requests") @db.Text
+  cancellationReason    String?       @map("cancellation_reason") @db.Text
+  cancelledAt           DateTime?     @map("cancelled_at")
+  
+  createdAt             DateTime      @default(now()) @map("created_at")
+  updatedAt             DateTime      @default(now()) @updatedAt @map("updated_at")
+
+  room                  Room          @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  guest                 User          @relation(fields: [guestId], references: [id], onDelete: Cascade)
+  review                Review?
+
+  @@map("bookings")
+  @@index([guestId])
+  @@index([roomId, checkInDate, checkOutDate])
+  @@index([status, paymentStatus])
+}
+
+model Review {
+  id                  String    @id @default(uuid())
+  bookingId           String    @unique @map("booking_id")
+  roomId              String    @map("room_id")
+  reviewerId          String    @map("reviewer_id")
+  
+  rating              Int
+  cleanlinessRating   Int?      @map("cleanliness_rating")
+  accuracyRating      Int?      @map("accuracy_rating")
+  communicationRating Int?      @map("communication_rating")
+  locationRating      Int?      @map("location_rating")
+  valueRating         Int?      @map("value_rating")
+  
+  comment             String?   @db.Text
+  
+  hostResponse        String?   @map("host_response") @db.Text
+  hostRespondedAt     DateTime? @map("host_responded_at")
+  
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @default(now()) @updatedAt @map("updated_at")
+
+  booking             Booking   @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  room                Room      @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  reviewer            User      @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+
+  @@map("reviews")
+  @@index([roomId])
+  @@index([rating])
+}
+
+model Wishlist {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  roomId    String   @map("room_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  room      Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@map("wishlists")
+  @@unique([userId, roomId], name: "unique_wishlist")
+  @@index([userId])
+}
+
+model Notification {
+  id            String           @id @default(uuid())
+  userId        String           @map("user_id")
+  type          NotificationType
+  titleKey      String           @map("title_key")
+  messageKey    String           @map("message_key")
+  messageParams Json?            @map("message_params")
+  link          String?          @db.VarChar(500)
+  isRead        Boolean          @default(false) @map("is_read")
+  createdAt     DateTime         @default(now()) @map("created_at")
+
+  user          User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+  @@index([userId, isRead])
+  @@index([createdAt])
+}
+
+model Translation {
+  id              String                @id @default(uuid())
+  entityType      TranslationEntityType @map("entity_type")
+  entityId        String                @map("entity_id")
+  fieldName       String                @map("field_name") @db.VarChar(50)
+  languageCode    String                @map("language_code") @db.VarChar(5)
+  translatedText  String                @map("translated_text") @db.Text
+  isAutoGenerated Boolean?              @default(true) @map("is_auto_generated")
+  provider        String?               @default("GOOGLE") @db.VarChar(50)
+  
+  createdAt       DateTime              @default(now()) @map("created_at")
+  updatedAt       DateTime              @default(now()) @updatedAt @map("updated_at")
+
+  @@map("translations")
+  @@unique([entityType, entityId, fieldName, languageCode], name: "unique_translation")
+  @@index([entityType, entityId, languageCode])
+}

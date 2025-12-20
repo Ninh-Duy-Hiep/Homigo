@@ -3,6 +3,7 @@ import { PrismaService } from './prisma/prisma.service';
 import { SeedService } from './database/seed.service';
 import { UsersSeeder } from './database/seeds/users.seeder';
 import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
+import { AuthModule } from './auth/auth.module';
 import * as path from 'path';
 
 @Module({
@@ -18,6 +19,7 @@ import * as path from 'path';
         AcceptLanguageResolver,
       ],
     }),
+    AuthModule,
   ],
   providers: [PrismaService, SeedService, UsersSeeder],
 })

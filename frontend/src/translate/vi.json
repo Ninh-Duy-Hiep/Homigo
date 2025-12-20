@@ -1,0 +1,62 @@
+{
+    "Metadata": {
+        "title": "Homigo | Tìm nơi ở lý tưởng của bạn",
+        "description": "Ứng dụng đặt phòng"
+    },
+    "Auth": {
+        "login": "Đăng nhập",
+        "register": "Đăng ký",
+        "logout": "Đăng xuất",
+        "email": "Email",
+        "password": "Mật khẩu",
+        "fullName": "Họ và tên",
+        "phoneNumber": "Số điện thoại",
+        "confirmPassword": "Xác nhận mật khẩu",
+        "rememberMe": "Ghi nhớ tài khoản",
+        "forgotPassword": "Quên mật khẩu?",
+        "loginButton": "Đăng nhập",
+        "loginLoading": "Đang đăng nhập...",
+        "registerButton": "Đăng ký",
+        "registerLoading": "Đang đăng ký...",
+        "or": "hoặc",
+        "continueWithGoogle": "Tiếp tục với Google",
+        "noAccount": "Chưa có tài khoản?",
+        "hasAccount": "Đã có tài khoản?",
+        "Validation": {
+            "emailRequired": "Email không được để trống",
+            "emailInvalid": "Email không hợp lệ",
+            "passwordRequired": "Mật khẩu không được để trống",
+            "passwordMin": "Mật khẩu phải có ít nhất 8 kí tự",
+            "passwordRegex": "Mật khẩu phải chứa ít nhất 1 chữ thường, 1 chữ hoa và 1 ký tự đặc biệt",
+            "fullNameRequired": "Họ và tên không được để trống",
+            "phoneRequired": "Số điện thoại không được để trống",
+            "phoneInvalid": "Số điện thoại không hợp lệ (VN)",
+            "confirmPasswordRequired": "Vui lòng nhập lại mật khẩu",
+            "passwordMismatch": "Mật khẩu nhập lại không khớp"
+        },
+        "toast": {
+            "success": {
+                "title": "Đăng nhập thành công",
+                "description": "Bạn đã đăng nhập thành công"
+            },
+            "error": "Đăng nhập thất bại"
+        }
+    },
+    "Common": {
+        "loading": "Đang tải...",
+        "error": "Đã có lỗi xảy ra",
+        "vi": "Tiếng Việt",
+        "en": "Tiếng Anh"
+    },
+    "Header": {
+        "trip": "Chuyến đi",
+        "favorites-list": "Danh sách yêu thích",
+        "personal-profile": "Hồ sơ cá nhân",
+        "settings": "Cài đặt",
+        "help": "Trợ giúp",
+        "notifications": "Thông báo",
+        "SearchBar": {
+            "location": "Địa điểm"
+        }
+    }
+}

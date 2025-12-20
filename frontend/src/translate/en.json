@@ -1,0 +1,62 @@
+{
+    "Metadata": {
+        "title": "Homigo | Find your perfect stay",
+        "description": "Booking App"
+    },
+    "Auth": {
+        "login": "Login",
+        "register": "Register",
+        "logout": "Logout",
+        "email": "Email",
+        "password": "Password",
+        "fullName": "Full Name",
+        "phoneNumber": "Phone Number",
+        "confirmPassword": "Confirm Password",
+        "rememberMe": "Remember me",
+        "forgotPassword": "Forgot password?",
+        "loginButton": "Login",
+        "loginLoading": "Logging in...",
+        "registerButton": "Register",
+        "registerLoading": "Registering...",
+        "or": "or",
+        "continueWithGoogle": "Continue with Google",
+        "noAccount": "Don't have an account?",
+        "hasAccount": "Already have an account?",
+        "Validation": {
+            "emailRequired": "Email is required",
+            "emailInvalid": "Invalid email address",
+            "passwordRequired": "Password is required",
+            "passwordMin": "Password must be at least 8 characters",
+            "passwordRegex": "Password must contain at least 1 lowercase, 1 uppercase, and 1 special character",
+            "fullNameRequired": "Full name is required",
+            "phoneRequired": "Phone number is required",
+            "phoneInvalid": "Invalid phone number",
+            "confirmPasswordRequired": "Please confirm your password",
+            "passwordMismatch": "Passwords do not match"
+        },
+        "toast": {
+            "success": {
+                "title": "Login successful",
+                "description": "You have successfully logged in."
+            },
+            "error": "Login failed"
+        }
+    },
+    "Common": {
+        "loading": "Loading...",
+        "error": "Something went wrong",
+        "vi": "Vietnamese",
+        "en": "English"
+    },
+    "Header": {
+        "trip": "Trip",
+        "favorites-list": "Favorites List",
+        "personal-profile": "Personal Profile",
+        "settings": "Settings",
+        "help": "Help",
+        "notifications": "Notifications",
+        "SearchBar": {
+            "location": "Location"
+        }
+    }
+}

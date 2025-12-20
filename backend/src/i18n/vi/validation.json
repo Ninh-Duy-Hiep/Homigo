@@ -1,0 +1,13 @@
+{
+    "NOT_EMPTY": "{field} là bắt buộc",
+    "EMAIL": "Địa chỉ email không hợp lệ",
+    "MIN": "{field} phải có ít nhất {min} ký tự",
+    "MAX": "{field} không được vượt quá {max} ký tự",
+    "STRING": "{field} phải là chuỗi ký tự",
+    "NUMBER": "{field} phải là số",
+    "BOOLEAN": "{field} phải là kiểu đúng/sai",
+    "ENUM": "{field} phải là một giá trị hợp lệ",
+    "PASSWORD_REGEX": "Mật khẩu phải chứa ít nhất một chữ thường, một chữ hoa và một ký tự đặc biệt",
+    "PASSWORD_MISMATCH": "Mật khẩu không khớp",
+    "PHONE_REGEX": "Định dạng số điện thoại không hợp lệ"
+}

@@ -6,6 +6,7 @@ import GuestCounter from "./guest-counter";
 import { Button } from "../ui/button";
 import { Search, X } from "lucide-react";
 import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 
 type GuestSearchBarProps = {
   activeSection: "location" | "time" | "guests" | null;
@@ -15,6 +16,7 @@ type GuestSearchBarProps = {
 
 export function GuestSearchBar({ activeSection, setActiveSection, containerRef }: GuestSearchBarProps) {
   const { location, date, guests, updateGuest, resetGuests } = useSearchStore();
+  const tHeader = useTranslations("Header");
 
   const totalGuests = useMemo(() => {
     return Object.values(guests).reduce((acc, curr) => acc + curr, 0);
@@ -40,9 +42,9 @@ export function GuestSearchBar({ activeSection, setActiveSection, containerRef }
           >
             <div className="flex flex-row items-center justify-between overflow-hidden mr-12 w-full">
               <div className="flex flex-col">
-                <Label className="cursor-pointer text-sm font-bold px-1 block">Khách</Label>
+                <Label className="cursor-pointer text-sm font-bold block">{tHeader("SearchBar.guests")}</Label>
                 <div className="text-sm text-gray-600 truncate">
-                  {totalGuests > 0 ? `${totalGuests} khách` : "Thêm khách"}
+                  {totalGuests > 0 ? `${totalGuests} khách` : tHeader("SearchBar.guestsPlaceholder")}
                 </div>
               </div>
               {totalGuests > 0 && (

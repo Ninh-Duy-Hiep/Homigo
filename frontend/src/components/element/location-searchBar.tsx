@@ -34,8 +34,8 @@ export function LocationSearchBar({ activeSection, setActiveSection, location, s
           <Label className="cursor-pointer text-sm font-bold block">{tHeader("SearchBar.location")}</Label>
           <input
             type="text"
-            className="text-sm text-gray-600 truncate bg-transparent outline-none placeholder:text-gray-400 w-full cursor-pointer"
-            placeholder="Bạn muốn đi đâu?"
+            className="text-sm text-gray-600 truncate bg-transparent outline-none placeholder:text-gray-600 w-full cursor-pointer"
+            placeholder={tHeader("SearchBar.locationPlaceholder")}
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             onFocus={() => setActiveSection("location")}

@@ -19,7 +19,7 @@ export default function SearchBar({ className }: { className?: string }) {
       <LayoutGroup id="search-bar-tabs">
         <div
           ref={searchBarRef}
-          className={`flex items-center justify-between border rounded-full shadow-sm transition-all max-w-[850px] mx-auto w-full relative ${
+          className={`flex items-center justify-between border rounded-full shadow-sm transition-all max-w-212.5 mx-auto w-full relative ${
             activeSection === null ? "bg-white" : "bg-gray-100/50"
           }`}
         >

@@ -7,6 +7,8 @@ import {
   Logger,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { I18nValidationException } from 'nestjs-i18n';
+import { ValidationError } from 'class-validator';
 
 interface HttpExceptionResponse {
   statusCode: number;
@@ -22,21 +24,19 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 
-    const status =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
-
-    const exceptionResponse =
-      exception instanceof HttpException
-        ? exception.getResponse()
-        : { message: 'Internal Server Error' };
-
+    let status = HttpStatus.INTERNAL_SERVER_ERROR;
     let error = 'Internal Server Error';
     let message: string | string[] | Record<string, any> = 'An error occurred';
     let validationErrors: unknown = null;
 
-    if (exception instanceof HttpException) {
+    if (exception instanceof I18nValidationException) {
+      status = HttpStatus.BAD_REQUEST;
+      error = 'Bad Request';
+      message = 'Invalid input data';
+      validationErrors = this.formatErrors(exception.errors);
+    } else if (exception instanceof HttpException) {
+      status = exception.getStatus();
+      const exceptionResponse = exception.getResponse();
       error = exception.name;
 
       const isObjectResponse =
@@ -45,7 +45,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
         'message' in exceptionResponse &&
         'error' in exceptionResponse;
 
-      if (status === (HttpStatus.BAD_REQUEST as number) && isObjectResponse) {
+      if (status === HttpStatus.BAD_REQUEST && isObjectResponse) {
         const responseBody = exceptionResponse as HttpExceptionResponse;
 
         if (
@@ -74,6 +74,16 @@ export class AllExceptionsFilter implements ExceptionFilter {
       data: null,
       error: error,
       validationErrors: validationErrors,
+    });
+  }
+
+  private formatErrors(errors: ValidationError[]) {
+    return errors.map((err) => {
+      const errorMsg = Object.values(err.constraints || {})[0];
+      return {
+        field: err.property,
+        error: errorMsg,
+      };
     });
   }
 }

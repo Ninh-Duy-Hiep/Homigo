@@ -50,13 +50,69 @@
     },
     "Header": {
         "trip": "Chuyến đi",
-        "favorites-list": "Danh sách yêu thích",
-        "personal-profile": "Hồ sơ cá nhân",
+        "favoritesList": "Danh sách yêu thích",
+        "personalProfile": "Hồ sơ cá nhân",
         "settings": "Cài đặt",
         "help": "Trợ giúp",
         "notifications": "Thông báo",
         "SearchBar": {
-            "location": "Địa điểm"
+            "location": "Địa điểm",
+            "locationPlaceholder": "Bạn muốn đi đâu ?",
+            "time": "Thời gian",
+            "timePlaceholder": "Thêm ngày",
+            "guests": "Khách",
+            "guestsPlaceholder": "Thêm khách"
+        },
+        "become-host": "Trở thành chủ nhà",
+        "tooltip": "Đăng chỗ ở của bạn và bắt đầu kiếm tiền"
+    },
+    "Footer": {
+        "title": "Nền tảng đặt phòng du lịch hàng đầu Việt Nam, mang đến trải nghiệm lưu trú độc đáo, an toàn và đáng tin cậy cho mọi hành trình của bạn.",
+        "Sections": {
+            "Explore": {
+                "title": "Khám phá",
+                "about": "Về Homigo",
+                "careers": "Cơ hội nghề nghiệp",
+                "features": "Tính năng mới",
+                "press": "Tin tức báo chí",
+                "giftCards": "Phiếu quà tặng"
+            },
+            "Support": {
+                "title": "Hỗ trợ",
+                "help": "Trung tâm trợ giúp",
+                "airCover": "AirCover cho khách",
+                "discrimination": "Chống phân biệt đối xử",
+                "disability": "Hỗ trợ người khuyết tật",
+                "report": "Báo cáo lo ngại"
+            },
+            "Policy": {
+                "title": "Chính sách",
+                "terms": "Điều khoản dịch vụ",
+                "privacy": "Chính sách bảo mật",
+                "cancellation": "Chính sách huỷ phòng",
+                "rules": "Quy chế hoạt động",
+                "cookies": "Cài đặt cookie"
+            }
+        }
+    },
+    "BecomeHost": {
+        "intro": {
+            "title": "Trở thành chủ nhà",
+            "description": "Kiếm thêm thu nhập với tư cách chủ nhà"
+        },
+        "header": {
+            "help": "Trợ giúp"   
+        },
+        "modal": {
+            "title": "Bạn cần đăng nhập để đăng ký trở thành Chủ nhà",
+            "description": "Để đảm bảo an toàn và bảo mật, vui lòng xác thực tài khoản của bạn trước khi bắt đầu quy trình đăng ký. Tham gia cộng đồng Homigo để bắt đầu kiếm thu nhập từ căn hộ của bạn.",
+            "button1": "Đăng nhập ngay",
+            "button2": "Quay lại trang chủ"
+        },
+        "security": {
+            "title1": "Bảo mật tuyệt đối",
+            "title2": "Thu nhập hấp dẫn",
+            "title3": "Hỗ trợ 24/7"
         }
     }
 }

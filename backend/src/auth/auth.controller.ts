@@ -5,6 +5,7 @@ import { RegisterGuestDto } from './dto/register-guest.dto';
 import { RegisterHostDto } from './dto/register-host.dto';
 import { LoginDto } from './dto/login.dto';
 import { AuthGuard } from '@nestjs/passport';
+import type { Request } from 'express';
 
 interface RequestWithGoogleUser {
   user: {
@@ -31,8 +32,9 @@ export class AuthController {
   @ApiOperation({
     summary: 'Đăng kí tài khoản chủ nhà',
   })
-  registerHost(@Body() dto: RegisterHostDto) {
-    return this.authService.registerHost(dto);
+  registerHost(@Body() dto: RegisterHostDto, @Req() req: Request) {
+    const token = req.headers.authorization;
+    return this.authService.registerHost(dto, token);
   }
 
   @Post('login')

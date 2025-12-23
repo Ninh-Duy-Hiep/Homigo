@@ -8,6 +8,7 @@ import {
   Settings,
   UserPen,
   Menu,
+  House,
   type LucideIcon,
 } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
@@ -16,6 +17,7 @@ import { Link, useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useQueryClient } from "@tanstack/react-query";
+import { Role } from "@/constants/enum";
 
 type MenuItem = {
   label: string;
@@ -24,10 +26,12 @@ type MenuItem = {
   onClick?: () => void;
   hiddenOnDesktop?: boolean;
   danger?: boolean;
+  hideWhenRole?: Role;
+  separator?: boolean;
 };
 
 export function UserMenu() {
-  const { logout } = useAuthStore();
+  const { user, logout } = useAuthStore();
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -42,15 +46,22 @@ export function UserMenu() {
 
   const menuItems: MenuItem[] = [
     { label: tHeader("trip"), icon: Plane, href: "#" },
-    { label: tHeader("favorites-list"), icon: Heart, href: "#" },
-    { label: tHeader("personal-profile"), icon: UserPen, href: "#" },
+    { label: tHeader("favoritesList"), icon: Heart, href: "#", separator: true },
+    { label: tHeader("personalProfile"), icon: UserPen, href: "#" },
     {
       label: tHeader("notifications"),
       icon: Bell,
       hiddenOnDesktop: true,
     },
     { label: tHeader("settings"), icon: Settings, href: "#" },
-    { label: tHeader("help"), icon: MessageCircleQuestionMark, href: "#" },
+    { label: tHeader("help"), icon: MessageCircleQuestionMark, href: "#", separator: true },
+    {
+      label: tHeader("become-host"),
+      icon: House,
+      href: "/become-a-host",
+      hideWhenRole: Role.HOST,
+      separator: true,
+    },
     {
       label: t("logout"),
       icon: LogOut,
@@ -58,6 +69,13 @@ export function UserMenu() {
       danger: true,
     },
   ];
+
+  const visibleMenuItems = menuItems.filter((item) => {
+    if (item.hideWhenRole && user?.role === item.hideWhenRole) {
+      return false;
+    }
+    return true;
+  });
 
   return (
     <Popover>
@@ -67,21 +85,23 @@ export function UserMenu() {
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent className="w-[210px] mr-8 flex flex-col gap-1">
-        {menuItems.map((item, idx) => (
-          <motion.div
-            key={idx}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={item.onClick}
-            className={`flex gap-3 py-2 text-sm cursor-pointer
-              ${item.hiddenOnDesktop ? "md:hidden hover:text-primary" : "hover:text-primary"}
-              ${item.danger ? "text-red-500 font-semibold hover:text-red-500" : ""}
-            `}
-          >
-            <item.icon size={20} />
-            {item.href ? <Link href={item.href}>{item.label}</Link> : <span>{item.label}</span>}
-          </motion.div>
+      <PopoverContent className="w-52.5 mr-8 flex flex-col gap-1">
+        {visibleMenuItems.map((item, idx) => (
+          <div key={idx}>
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={item.onClick}
+              className={`flex gap-3 py-2 text-sm cursor-pointer
+                ${item.hiddenOnDesktop ? "md:hidden hover:text-primary" : "hover:text-primary"}
+                ${item.danger ? "text-red-500 font-semibold hover:text-red-500" : ""}
+              `}
+            >
+              <item.icon size={20} />
+              {item.href ? <Link href={item.href}>{item.label}</Link> : <span>{item.label}</span>}
+            </motion.div>
+            {item.separator && <div className="h-px bg-border my-1" />}
+          </div>
         ))}
       </PopoverContent>
     </Popover>

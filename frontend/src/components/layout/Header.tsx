@@ -17,6 +17,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 export const Header = () => {
   const { isAuthenticated, user } = useAuthStore();
   const t = useTranslations("Auth");
+  const tHeader = useTranslations("Header");
 
   return (
     <motion.header
@@ -30,7 +31,7 @@ export const Header = () => {
           <h1 className="hidden text-xl font-bold text-primary lg:block xl:text-2xl">HOMIGO</h1>
         </Link>
 
-        <div className="hidden flex-1 justify-center px-8 lg:flex max-w-[850px]">
+        <div className="hidden flex-1 justify-center px-8 lg:flex max-w-212.5">
           <SearchBar className="w-full" />
         </div>
 
@@ -58,16 +59,18 @@ export const Header = () => {
           ) : (
             <>
               <div className="hidden md:flex items-center gap-2">
-                <Link href="#" className="text-sm font-semibold">
+                {!isAuthenticated && (
+                  <Link href="/become-a-host" className="text-sm font-semibold">
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Button variant="outline">Trở thành chủ nhà</Button>
+                        <Button variant="outline">{tHeader("become-host")}</Button>
                       </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Đăng chỗ ở của bạn và bắt đầu kiếm tiền</p>
+                      <TooltipContent side="bottom">
+                        <p>{tHeader("tooltip")}</p>
                       </TooltipContent>
-                  </Tooltip>
-                </Link>
+                    </Tooltip>
+                  </Link>
+                )}
 
                 <Link href="/auth/login">
                   <Button variant="default">{t("login")}</Button>

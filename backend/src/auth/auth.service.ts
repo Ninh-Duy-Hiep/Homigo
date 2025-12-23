@@ -78,14 +78,100 @@ export class AuthService {
     };
   }
 
-  async registerHost(dto: RegisterHostDto) {
+  async registerHost(dto: RegisterHostDto, token?: string) {
+    let currentUser: JwtPayload | null = null;
+
+    if (token) {
+      try {
+        const extractedToken = token.replace('Bearer ', '').trim();
+        currentUser = (await this.jwtService.verifyAsync(
+          extractedToken,
+        )) as unknown as JwtPayload;
+      } catch {
+        // Token invalid or expired
+      }
+    }
+
+    if (currentUser) {
+      if (currentUser.email !== dto.email) {
+        throw new BadRequestException(
+          this.i18n.t('auth.INVALID_CREDENTIALS', {
+            lang: I18nContext.current()?.lang,
+          }),
+        );
+      }
+
+      const existingUser = await this.prisma.user.findUnique({
+        where: { id: currentUser.userId },
+      });
+
+      if (!existingUser) {
+        throw new BadRequestException(
+          this.i18n.t('auth.USER_NOT_FOUND', {
+            lang: I18nContext.current()?.lang,
+          }),
+        );
+      }
+
+      if (existingUser.role === Role.HOST) {
+        throw new BadRequestException(
+          this.i18n.t('auth.ALREADY_HOST', {
+            lang: I18nContext.current()?.lang,
+          }),
+        );
+      }
+
+      if (existingUser.hostStatus === HostStatus.PENDING) {
+        throw new BadRequestException(
+          this.i18n.t('auth.REQUEST_PENDING', {
+            lang: I18nContext.current()?.lang,
+          }),
+        );
+      }
+
+      if (
+        existingUser.hostStatus === HostStatus.NEW ||
+        existingUser.hostStatus === HostStatus.REJECTED ||
+        existingUser.hostStatus === HostStatus.APPROVED
+      ) {
+        const updatedUser = await this.prisma.user.update({
+          where: { id: existingUser.id },
+          data: {
+            fullName: dto.fullName,
+            avatar: dto.avatar,
+            bio: dto.bio,
+            phoneNumber: dto.phoneNumber,
+            identityCardUrl: dto.identityCardUrl,
+            hostStatus: HostStatus.PENDING,
+          },
+        });
+
+        return {
+          message: this.i18n.t('auth.UPGRADE_HOST_SUCCESS', {
+            lang: I18nContext.current()?.lang,
+          }),
+          user: {
+            id: updatedUser.id,
+            email: updatedUser.email,
+            fullName: updatedUser.fullName,
+            role: updatedUser.role,
+            avatar: updatedUser.avatar,
+          },
+          accessToken: token,
+        };
+      }
+    }
+
     const exists = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
-    if (exists)
+    if (exists) {
       throw new BadRequestException(
-        this.i18n.t('auth.USER_EXISTS', { lang: I18nContext.current()?.lang }),
+        this.i18n.t('auth.LOGIN_REQUIRED', {
+          lang: I18nContext.current()?.lang,
+        }),
       );
+    }
 
     const hashedPassword = await bcrypt.hash(dto.password, 10);
 
@@ -94,16 +180,17 @@ export class AuthService {
         email: dto.email,
         password: hashedPassword,
         fullName: dto.fullName,
+        avatar: dto.avatar,
         bio: dto.bio,
         phoneNumber: dto.phoneNumber,
         identityCardUrl: dto.identityCardUrl,
-        role: Role.HOST,
+        role: Role.USER,
         hostStatus: HostStatus.PENDING,
         provider: Provider.LOCAL,
       },
     });
 
-    const token = await this.signToken({
+    const newToken = await this.signToken({
       userId: newUser.id,
       email: newUser.email,
       fullName: newUser.fullName,
@@ -122,9 +209,8 @@ export class AuthService {
         fullName: newUser.fullName,
         role: newUser.role,
         avatar: newUser.avatar,
-        hostStatus: newUser.hostStatus,
       },
-      accessToken: token.accessToken,
+      accessToken: newToken.accessToken,
     };
   }
 

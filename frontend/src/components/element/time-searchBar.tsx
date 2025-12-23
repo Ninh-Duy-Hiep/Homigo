@@ -7,6 +7,7 @@ import { X } from "lucide-react";
 import { useSearchStore } from "@/stores/useSearchStore";
 import { Calendar } from "../ui/calendar";
 import { vi } from "date-fns/locale";
+import { useTranslations } from "next-intl";
 
 type TimeSearchBarProps = {
   activeSection: "location" | "time" | "guests" | null;
@@ -18,6 +19,7 @@ type TimeSearchBarProps = {
 
 export function TimeSearchBar({ activeSection, setActiveSection, date, setDate, containerRef }: TimeSearchBarProps) {
   const { resetDate } = useSearchStore();
+  const tHeader = useTranslations("Header");
 
   return (
     <div
@@ -38,13 +40,13 @@ export function TimeSearchBar({ activeSection, setActiveSection, date, setDate, 
             className={`relative z-10 flex flex-row justify-between items-center px-6 py-2 w-full h-full cursor-pointer text-left`}
           >
             <div>
-              <Label className="cursor-pointer text-sm font-bold px-1 block">Thời gian</Label>
+              <Label className="cursor-pointer text-sm font-bold block">{tHeader("SearchBar.time")}</Label>
               <div className="text-sm text-gray-600 truncate">
                 {date?.from
                   ? date.to
                     ? `${format(date.from, "dd/MM/yyyy")} - ${format(date.to, "dd/MM/yyyy")}`
                     : format(date.from, "dd/MM/yyyy")
-                  : "Thêm ngày"}
+                  : tHeader("SearchBar.timePlaceholder")}
               </div>
             </div>
             {date && (

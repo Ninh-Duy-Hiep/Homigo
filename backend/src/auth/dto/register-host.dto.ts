@@ -15,7 +15,7 @@ export class RegisterHostDto {
   @IsEmail({}, { message: 'validation.EMAIL' })
   email: string;
 
-  @ApiProperty({ example: '@abc123' })
+  @ApiProperty({ example: '@User123' })
   @IsString({ message: 'validation.STRING' })
   @IsNotEmpty({ message: 'validation.NOT_EMPTY' })
   @MinLength(8, { message: 'validation.MIN' })
@@ -28,6 +28,13 @@ export class RegisterHostDto {
   @IsString({ message: 'validation.STRING' })
   @IsNotEmpty({ message: 'validation.NOT_EMPTY' })
   fullName: string;
+
+  @ApiProperty({
+    example: 'https://cloudinary.com/avatar.jpg',
+    required: false,
+  })
+  @IsOptional()
+  avatar?: string;
 
   @ApiProperty({
     example: 'Tôi là host có 5 năm kinh nghiệm...',

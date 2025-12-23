@@ -50,13 +50,69 @@
     },
     "Header": {
         "trip": "Trip",
-        "favorites-list": "Favorites List",
-        "personal-profile": "Personal Profile",
+        "favoritesList": "Favorites List",
+        "personalProfile": "Personal Profile",
         "settings": "Settings",
         "help": "Help",
         "notifications": "Notifications",
         "SearchBar": {
-            "location": "Location"
+            "location": "Location",
+            "locationPlaceholder": "Where do you want to go?",
+            "time": "Time",
+            "timePlaceholder": "Check-in and Check-out",
+            "guests": "Guests",
+            "guestsPlaceholder": "Add guests"
+        },
+        "become-host": "Become a host",
+        "tooltip": "Post your accommodation and start earning money"
+    },
+    "Footer": {
+        "title": "Vietnam's leading travel booking platform, offering unique, safe, and reliable accommodation experiences for all your journeys.",
+        "Sections": {
+            "Explore": {
+                "title": "Explore",
+                "about": "About Homigo",
+                "careers": "Careers",
+                "features": "New features",
+                "press": "Press",
+                "giftCards": "Gift cards"
+            },
+            "Support": {
+                "title": "Support",
+                "help": "Help Center",
+                "airCover": "AirCover for Guests",
+                "discrimination": "Anti-discrimination",
+                "disability": "Disability support",
+                "report": "Report a concern"
+            },
+            "Policy": {
+                "title": "Policies",
+                "terms": "Terms of Service",
+                "privacy": "Privacy Policy",
+                "cancellation": "Cancellation Policy",
+                "rules": "Operating Regulations",
+                "cookies": "Cookie settings"
+            }
+        }
+    },
+    "BecomeHost": {
+        "intro": {
+            "title": "Become a host",
+            "description": "Earn money as a host"
+        },
+        "header": {
+            "help": "Help"   
+        },
+        "modal": {
+            "title": "You need to log in to register as a Host",
+            "description": "To ensure safety and security, please verify your account before starting the registration process. Join the Homigo community to start earning income from your apartment.",
+            "button1": "Login now",
+            "button2": "Return to homepage"
+        },
+        "security": {
+            "title1": "Absolute security",
+            "title2": "Attractive income",
+            "title3": "24/7 Support"
         }
     }
 }

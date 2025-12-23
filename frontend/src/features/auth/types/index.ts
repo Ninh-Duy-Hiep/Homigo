@@ -35,4 +35,8 @@ export interface UserAuth {
   role: string;
   avatar: string | null;
   hostStatus: HostStatus;
+  phoneNumber?: string;
+  identityCardUrl?: string;
+  bio?: string;
+  rejectionReason?: string;
 }

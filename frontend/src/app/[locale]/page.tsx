@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { Header } from "@/components/layout/Header";
 import { useTranslations } from "next-intl";
+import Footer from "@/components/layout/Footer";
 
 interface Destination {
   id: number;
@@ -66,6 +67,7 @@ export default function HomePage() {
           </motion.div>
         ))}
       </div> */}
+      <Footer />
     </main>
   );
 }

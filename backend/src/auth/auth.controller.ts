@@ -4,18 +4,12 @@ import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { RegisterGuestDto } from './dto/register-guest.dto';
 import { RegisterHostDto } from './dto/register-host.dto';
 import { LoginDto } from './dto/login.dto';
+import { SendVerificationOtpDto } from './dto/send-verification-otp.dto';
+import { VerifyOtpDto } from './dto/verify-otp.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from './decorators/get-user.decorator';
 import type { Request } from 'express';
-
-interface RequestWithGoogleUser {
-  user: {
-    email: string;
-    firstName: string;
-    lastName: string;
-    picture: string;
-    accessToken: string;
-  };
-}
+import type { GoogleUser } from './auth.service';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -51,7 +45,27 @@ export class AuthController {
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
   @ApiOperation({ summary: 'Google Callback URL' })
-  googleAuthRedirect(@Req() req: RequestWithGoogleUser) {
-    return this.authService.googleLogin(req);
+  googleAuthRedirect(@GetUser() user: GoogleUser) {
+    return this.authService.googleLogin(user);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Post('send-verification-otp')
+  @ApiOperation({ summary: 'Gửi mã OTP xác thực email' })
+  async sendOtp(
+    @GetUser('userId') userId: string,
+    @Body() dto: SendVerificationOtpDto,
+  ) {
+    return this.authService.requestEmailVerification(userId, dto);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Post('verify-otp')
+  @ApiOperation({ summary: 'Xác thực mã OTP' })
+  async verifyOtp(
+    @GetUser('userId') userId: string,
+    @Body() dto: VerifyOtpDto,
+  ) {
+    return this.authService.verifyOtp(userId, dto);
   }
 }

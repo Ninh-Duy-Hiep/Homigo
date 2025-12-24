@@ -41,7 +41,7 @@ export function LanguageSwitcher({
       <DropdownMenuContent>
         <DropdownMenuRadioGroup value={local} onValueChange={onChange}>
           {locales?.map((locale) => (
-            <DropdownMenuRadioItem value={locale.code} key={locale.code}>
+            <DropdownMenuRadioItem value={locale.code} key={locale.code} className="cursor-pointer">
               {locale.label}
             </DropdownMenuRadioItem>
           ))}

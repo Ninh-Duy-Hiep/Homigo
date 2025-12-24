@@ -4,7 +4,6 @@ import {
   Body,
   Patch,
   UseGuards,
-  Req,
   UseInterceptors,
   ClassSerializerInterceptor,
   Query,
@@ -18,14 +17,11 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
-import { JwtPayload } from 'src/auth/strategies/jwt.strategy';
 import { FilterGuestDto } from './dto/filter-guest.dto';
 import { FilterHostDto } from './dto/filter-host.dto';
 import { UsersService } from './user.service';
 
-interface RequestWithUser {
-  user: JwtPayload;
-}
+import { GetUser } from 'src/auth/decorators/get-user.decorator';
 
 @ApiTags('Users')
 @ApiBearerAuth()
@@ -59,16 +55,19 @@ export class UsersController {
 
   @Get('profile')
   @ApiOperation({ summary: 'Lấy thông tin cá nhân' })
-  async getProfile(@Req() req: RequestWithUser) {
-    const user = await this.usersService.getProfile(req.user.userId);
+  async getProfile(@GetUser('userId') userId: string) {
+    const user = await this.usersService.getProfile(userId);
     return new UserEntity(user);
   }
 
   @Patch('profile')
   @ApiOperation({ summary: 'Cập nhật hồ sơ' })
   @ApiResponse({ status: 200, description: 'Success or Request Submitted' })
-  async updateProfile(@Req() req: RequestWithUser, @Body() dto: UpdateUserDto) {
-    const result = await this.usersService.updateProfile(req.user.userId, dto);
+  async updateProfile(
+    @GetUser('userId') userId: string,
+    @Body() dto: UpdateUserDto,
+  ) {
+    const result = await this.usersService.updateProfile(userId, dto);
 
     if (result.user) {
       return { ...result, user: new UserEntity(result.user) };

@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { authApi } from "../api";
 import { useAuthStore } from "@/stores/useAuthStore";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { getErrorMessage } from "@/lib/axios";
 import { LoginSchemaType } from "../types/schema";
 import { useToast } from "@/hooks/useToast";
@@ -28,7 +28,13 @@ export const useLogin = () => {
         description: t("toast.success.description"),
       });
 
-      router.push("/");
+      const redirectUrl = sessionStorage.getItem("prevUrl");
+      if (redirectUrl) {
+        sessionStorage.removeItem("prevUrl");
+        router.push(redirectUrl);
+      } else {
+        router.push("/");
+      }
     },
     onError: (error) => {
       toast({

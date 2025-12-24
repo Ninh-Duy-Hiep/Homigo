@@ -6,6 +6,8 @@ import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 import { AuthModule } from './auth/auth.module';
 import * as path from 'path';
 import { UsersModule } from './user/user.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 
 @Module({
   imports: [
@@ -19,6 +21,30 @@ import { UsersModule } from './user/user.module';
         { use: QueryResolver, options: ['lang'] },
         AcceptLanguageResolver,
       ],
+    }),
+    MailerModule.forRoot({
+      transport: {
+        host: 'smtp.resend.com',
+        port: 587,
+        secure: false,
+        auth: {
+          user: 'resend',
+          pass: process.env.RESEND_API_KEY,
+        },
+      },
+      defaults: {
+        from:
+          process.env.NODE_ENV === 'production'
+            ? 'Homigo <no-reply@homigo.dev>'
+            : 'Homigo <onboarding@resend.dev>',
+      },
+      template: {
+        dir: path.join(__dirname, 'templates'),
+        adapter: new HandlebarsAdapter(),
+        options: {
+          strict: true,
+        },
+      },
     }),
     AuthModule,
     UsersModule,

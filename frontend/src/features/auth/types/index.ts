@@ -40,3 +40,12 @@ export interface UserAuth {
   bio?: string;
   rejectionReason?: string;
 }
+
+export interface SendOtpRequest {
+  newEmail?: string;
+}
+
+export interface VerifyOtpRequest {
+  code: string;
+}
+

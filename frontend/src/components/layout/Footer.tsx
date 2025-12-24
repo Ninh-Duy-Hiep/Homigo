@@ -23,7 +23,7 @@ export default function Footer() {
             <Image src={logo} alt="Logo" width={50} height={50} className="h-12 w-auto" loading="eager" />
             <h1 className="text-xl font-bold text-primary">HOMIGO</h1>
           </Link>
-          <p className="text-neutral">{tFooter("title")}</p>
+          <p className="text-neutral mt-2">{tFooter("title")}</p>
         </div>
         {FOOTER_LINKS.map((section) => (
           <div key={section.title}>

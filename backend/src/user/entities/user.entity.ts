@@ -8,19 +8,25 @@ export class UserEntity implements User {
 
   @Exclude()
   password: string | null;
+  @Exclude()
+  role: Role;
+  @Exclude()
+  googleId: string | null;
+  @Exclude()
+  hostStatus: HostStatus;
+  @Exclude()
+  identityCardCloudinaryId: string | null;
+  @Exclude()
+  emailVerified: boolean;
+  @Exclude()
+  provider: Provider;
 
   avatar: string | null;
   bio: string | null;
-  role: Role;
-  provider: Provider;
-  googleId: string | null;
-  hostStatus: HostStatus;
   phoneNumber: string | null;
   identityCardUrl: string | null;
-  identityCardCloudinaryId: string | null;
   rejectionReason: string | null;
   isActive: boolean;
-  emailVerified: boolean;
   lastLoginAt: Date | null;
   createdAt: Date;
   updatedAt: Date;

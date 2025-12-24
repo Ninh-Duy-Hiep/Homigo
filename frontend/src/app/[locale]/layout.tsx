@@ -1,12 +1,13 @@
 import { Inter } from "next/font/google";
 import "@/app/globals.css";
-import Providers from "@/providers/providers";
 import { Toaster } from "@/components/ui/sonner";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import NextTopLoader from 'nextjs-toploader';
+import RouteTracker from "@/components/common/RouteTracker";
+import Providers from "@/providers/Providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -50,7 +51,10 @@ export default async function LocaleLayout({
           shadow="0 0 10px #fb631c,0 0 5px #fb631c"
         />
         <NextIntlClientProvider messages={messages}>
-          <Providers>{children}</Providers>
+          <Providers>
+            <RouteTracker />
+            {children}
+          </Providers>
           <Toaster />
         </NextIntlClientProvider>
       </body>

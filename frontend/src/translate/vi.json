@@ -101,7 +101,8 @@
             "description": "Kiếm thêm thu nhập với tư cách chủ nhà"
         },
         "header": {
-            "help": "Trợ giúp"   
+            "help": "Trợ giúp",
+            "button": "Về trang chủ" 
         },
         "modal": {
             "title": "Bạn cần đăng nhập để đăng ký trở thành Chủ nhà",
@@ -113,6 +114,24 @@
             "title1": "Bảo mật tuyệt đối",
             "title2": "Thu nhập hấp dẫn",
             "title3": "Hỗ trợ 24/7"
+        },
+        "steps": {
+            "step1": {
+                "title": "Xác thực Email",
+                "description": "Bắt đầu với địa chỉ email của bạn"
+            },
+            "step2": {
+                "title": "Thông tin tài khoản",
+                "description": "Cung cấp chi tiết cá nhân và thông tin liên lạc để chúng tôi hiểu rõ hơn về bạn."
+            },
+            "step3": {
+                "title": "Xác minh danh tính",
+                "description": "Tải lên giấy tờ tùy thân hợp lệ để đảm bảo an toàn và tin cậy cho cộng đồng."
+            }
+        },
+        "timeline": {
+            "title": "Trở thành chủ nhà chỉ trong vài bước",
+            "description": "Đăng ký ngay để bắt đầu <primary>kiếm thêm thu nhập</primary>, chia sẻ không gian sống độc đáo và <primary>gặp gỡ khách du lịch</primary> từ khắp nơi trên thế giới."
         }
     }
 }

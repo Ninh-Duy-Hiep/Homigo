@@ -1,6 +1,6 @@
 "use client";
 
-import { Link } from "@/i18n/routing";
+import { Link, usePathname } from "@/i18n/routing";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { motion } from "motion/react";
 import { Bell, Search } from "lucide-react";
@@ -13,11 +13,19 @@ import SearchBar from "../SearchBar";
 import { UserMenu } from "../element/user-menu";
 import { MenuBar } from "../element/menu-bar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { useEffect } from "react";
 
 export const Header = () => {
   const { isAuthenticated, user } = useAuthStore();
   const t = useTranslations("Auth");
   const tHeader = useTranslations("Header");
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (!isAuthenticated && !pathname.includes("/auth")) {
+      sessionStorage.setItem("prevUrl", pathname);
+    }
+  }, [pathname, isAuthenticated]);
 
   return (
     <motion.header

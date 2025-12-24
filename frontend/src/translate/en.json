@@ -101,7 +101,8 @@
             "description": "Earn money as a host"
         },
         "header": {
-            "help": "Help"   
+            "help": "Help",
+            "button": "Back to homepage" 
         },
         "modal": {
             "title": "You need to log in to register as a Host",
@@ -113,6 +114,24 @@
             "title1": "Absolute security",
             "title2": "Attractive income",
             "title3": "24/7 Support"
+        },
+        "steps": {
+            "step1": {
+                "title": "Verify Email",
+                "description": "Start with your email address"
+            },
+            "step2": {
+                "title": "Account Information",
+                "description": "Provide personal details and contact information so we can get to know you better."
+            },
+            "step3": {
+                "title": "Identity Verification",
+                "description": "Upload valid identification documents to ensure safety and trust for the community."
+            }
+        },
+        "timeline": {
+            "title": "Become a host in just a few steps",
+            "description": "Register now to start <primary>earning extra income</primary>, sharing your unique living space, and <primary>meeting travelers</primary> from all over the world."
         }
     }
 }

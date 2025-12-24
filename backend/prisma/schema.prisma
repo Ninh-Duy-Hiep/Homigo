@@ -102,6 +102,7 @@ model User {
   notifications             Notification[]
 
   updateRequests            HostUpdateRequest[]
+  otp                       Otp?
 
   @@map("users")
   @@index([hostStatus])
@@ -314,4 +315,15 @@ model Translation {
   @@map("translations")
   @@unique([entityType, entityId, fieldName, languageCode], name: "unique_translation")
   @@index([entityType, entityId, languageCode])
+}
+
+model Otp {
+  id        String   @id @default(uuid())
+  code      String
+  expiresAt DateTime @map("expires_at")
+  tempEmail String?  @map("temp_email")
+  userId    String   @unique @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("otps")
 }

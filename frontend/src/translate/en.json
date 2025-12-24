@@ -101,7 +101,8 @@
             "description": "Earn money as a host"
         },
         "header": {
-            "help": "Help"   
+            "help": "Help",
+            "button": "Back to homepage" 
         },
         "modal": {
             "title": "You need to log in to register as a Host",

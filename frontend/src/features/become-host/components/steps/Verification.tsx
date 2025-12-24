@@ -1,3 +1,4 @@
+import EmailVerificationForm from "../ui/EmailVerificationForm";
 import { StepTimeLine } from "../ui/StepTimeLine";
 
 
@@ -7,7 +8,7 @@ export default function Verification() {
   return (
     <div className="grid grid-cols-6">
       <StepTimeLine currentStep={currentStep}/>
-      <div className="col-span-4"></div>
+      <div className="col-span-4 flex justify-center items-center"><EmailVerificationForm/></div>
     </div>
   );
 }

@@ -9,6 +9,8 @@ import { FaUserCircle } from "react-icons/fa";
 import { useTranslations } from "next-intl";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Button } from "../ui/button";
+import { AiFillHome } from "react-icons/ai";
 
 export const HostOnboardingHeader = () => {
   const { user } = useAuthStore();
@@ -27,6 +29,11 @@ export const HostOnboardingHeader = () => {
         </Link>
 
         <div className="flex gap-4 items-center">
+          <Link href="/">
+            <Button variant="nothing" className="text-neutral border hover:bg-subtle">
+              <AiFillHome className="w-5 h-5"/>
+              {t("button")}</Button>
+          </Link>
           <Link href="#" className="flex gap-1 items-center text-sm text-neutral font-semibold">
             <IoMdHelpCircle className="w-5 h-5" />
             {t("help")}

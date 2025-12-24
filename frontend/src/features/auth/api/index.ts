@@ -1,7 +1,7 @@
 import api from "@/lib/axios";
 import { ApiResponse } from "@/types/api";
 import { LoginSchemaType, RegisterGuestRequest } from "../types/schema";
-import { AuthResponse } from "../types";
+import { AuthResponse, SendOtpRequest, VerifyOtpRequest } from "../types";
 
 export const authApi = {
   login: async (data: LoginSchemaType) => {
@@ -11,6 +11,16 @@ export const authApi = {
 
   registerGuest: async (data: RegisterGuestRequest) => {
     const response = await api.post<ApiResponse<AuthResponse>>("/auth/register/guest", data);
+    return response.data;
+  },
+
+  sendOtp: async (data: SendOtpRequest) => {
+    const response = await api.post<ApiResponse<{ message: string }>>("/auth/send-verification-otp", data);
+    return response.data;
+  },
+
+  verifyOtp: async (data: VerifyOtpRequest) => {
+    const response = await api.post<ApiResponse<{ message: string }>>("/auth/verify-otp", data);
     return response.data;
   },
 };

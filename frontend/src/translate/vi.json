@@ -101,7 +101,8 @@
             "description": "Kiếm thêm thu nhập với tư cách chủ nhà"
         },
         "header": {
-            "help": "Trợ giúp"   
+            "help": "Trợ giúp",
+            "button": "Về trang chủ" 
         },
         "modal": {
             "title": "Bạn cần đăng nhập để đăng ký trở thành Chủ nhà",

@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { steps } from "../../types";
+import { steps } from "../../become-host.types";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 
@@ -12,7 +12,7 @@ export function StepTimeLine({ currentStep }: StepTimeLineProps) {
   const tTimeline = useTranslations("BecomeHost.timeline");
 
   return (
-    <div className="col-span-2 bg-linear-to-b from-primary/5 to-white px-35 py-10">
+    <div className="h-full bg-linear-to-b from-primary/5 to-white px-6 py-8 lg:px-10 lg:py-16">
       <h1 className="text-4xl font-extrabold">{tTimeline("title")}</h1>
       <p className="mt-3 text-sm font-semibold text-muted-foreground">
         {tTimeline.rich("description", {

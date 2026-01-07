@@ -2,8 +2,8 @@
 
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoginSchema, LoginSchemaType } from "../types/schema";
-import { useLogin } from "../hooks/useAuthMutations";
+import { LoginSchema, LoginSchemaType } from "../auth.schema";
+import { useLogin } from "../auth.hooks";
 import { motion } from "motion/react";
 import { CustomInput } from "./ui";
 import { Eye, EyeOff, User } from "lucide-react";

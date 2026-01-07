@@ -102,7 +102,7 @@
         },
         "header": {
             "help": "Trợ giúp",
-            "button": "Về trang chủ" 
+            "button": "Về trang chủ"
         },
         "modal": {
             "title": "Bạn cần đăng nhập để đăng ký trở thành Chủ nhà",
@@ -132,6 +132,32 @@
         "timeline": {
             "title": "Trở thành chủ nhà chỉ trong vài bước",
             "description": "Đăng ký ngay để bắt đầu <primary>kiếm thêm thu nhập</primary>, chia sẻ không gian sống độc đáo và <primary>gặp gỡ khách du lịch</primary> từ khắp nơi trên thế giới."
+        },
+        "validation": {
+            "emailRequired": "Vui lòng nhập email",
+            "emailInvalid": "Email không hợp lệ",
+            "otpLength": "Mã OTP phải có 6 chữ số"
+        },
+        "toast": {
+            "success": "Thành công",
+            "otpSent": "Mã OTP đã được gửi đến email của bạn.",
+            "otpVerified": "Email của bạn đã được xác minh.",
+            "verifySuccess": "Xác thực thành công",
+            "verifyFailed": "Xác thực thất bại",
+            "resendSuccess": "Đã gửi lại",
+            "resendDesc": "Mã OTP mới đã được gửi.",
+            "error": "Lỗi"
+        },
+        "verification": {
+            "title": "Xác thực Email",
+            "description": "Vui lòng nhập email chính chủ để nhận mã xác thực bảo mật.",
+            "emailLabel": "Địa chỉ email",
+            "sendCode": "Gửi mã",
+            "change": "Thay đổi",
+            "enterCode": "Nhập mã xác thực",
+            "codeSentTo": "Mã đã được gửi đến",
+            "confirm": "Xác nhận",
+            "resendQuestion": "Gửi lại mã?"
         }
     }
 }

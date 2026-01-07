@@ -1,4 +1,4 @@
-import { UserAuth } from "@/features/auth/types";
+import { UserAuth } from "@/features/auth/auth.types";
 import { create } from "zustand";
 
 interface AuthState {

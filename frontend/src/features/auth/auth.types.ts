@@ -48,4 +48,3 @@ export interface SendOtpRequest {
 export interface VerifyOtpRequest {
   code: string;
 }
-

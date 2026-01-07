@@ -1,62 +1,78 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useToast } from "@/hooks/useToast";
-import { authApi } from "@/features/auth/api";
+import { authApi } from "@/features/auth/auth.service";
 import { getErrorMessage } from "@/lib/axios";
-import { 
-  EmailVerificationSchema, 
-  EmailVerificationSchemaType, 
-  OtpVerificationSchema, 
-  OtpVerificationSchemaType 
-} from "../types/schema";
+import {
+  EmailVerificationSchema,
+  EmailVerificationSchemaType,
+  OtpVerificationSchema,
+  OtpVerificationSchemaType,
+} from "./become-host.schema";
+
+import { useTranslations } from "next-intl";
 
 export const useEmailVerification = () => {
-  const [step, setStep] = useState<1 | 2>(1);
   const [loading, setLoading] = useState(false);
-  const [targetEmail, setTargetEmail] = useState("");
-  const { toast } = useToast();
-  
+
+  const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
-  const codeParam = searchParams.get("code");
+  const { toast } = useToast();
+  const t = useTranslations("BecomeHost");
+  const tValidation = useTranslations("BecomeHost.validation");
+
   const emailParam = searchParams.get("email");
+  const codeParam = searchParams.get("code");
+  const stepParam = searchParams.get("step");
+
+  const targetEmail = emailParam || "";
+
+  const step = (codeParam && emailParam) || (emailParam && stepParam === "verify") ? 2 : 1;
 
   const emailForm = useForm<EmailVerificationSchemaType>({
-    resolver: zodResolver(EmailVerificationSchema),
+    resolver: zodResolver(EmailVerificationSchema(tValidation.raw)),
     defaultValues: {
       email: emailParam || "",
     },
   });
 
   const otpForm = useForm<OtpVerificationSchemaType>({
-    resolver: zodResolver(OtpVerificationSchema),
+    resolver: zodResolver(OtpVerificationSchema(tValidation.raw)),
     defaultValues: {
       otp: codeParam || "",
     },
   });
 
   useEffect(() => {
-    if (codeParam && emailParam) {
-      setTargetEmail(emailParam);
-      setStep(2);
+    if (emailParam) {
+      emailForm.setValue("email", emailParam);
     }
-  }, [codeParam, emailParam]);
+    if (codeParam) {
+      otpForm.setValue("otp", codeParam);
+    }
+  }, [emailParam, codeParam, emailForm, otpForm]);
 
   const onSendOtp = async (data: EmailVerificationSchemaType) => {
     setLoading(true);
     try {
       await authApi.sendOtp({ newEmail: data.email });
-      setTargetEmail(data.email);
-      setStep(2);
+
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("email", data.email);
+      params.set("step", "verify");
+      router.replace(`${pathname}?${params.toString()}`);
+
       toast({
-        title: "Thành công",
-        description: "Mã OTP đã được gửi đến email của bạn.",
+        title: t("toast.success"),
+        description: t("toast.otpSent"),
         type: "success",
       });
     } catch (error) {
       toast({
-        title: "Lỗi",
+        title: t("toast.error"),
         description: getErrorMessage(error),
         type: "error",
       });
@@ -70,13 +86,13 @@ export const useEmailVerification = () => {
     try {
       await authApi.verifyOtp({ code: data.otp });
       toast({
-        title: "Xác thực thành công",
-        description: "Email của bạn đã được xác minh.",
+        title: t("toast.verifySuccess"),
+        description: t("toast.otpVerified"),
         type: "success",
       });
     } catch (error) {
       toast({
-        title: "Xác thực thất bại",
+        title: t("toast.verifyFailed"),
         description: getErrorMessage(error),
         type: "error",
       });
@@ -91,13 +107,13 @@ export const useEmailVerification = () => {
     try {
       await authApi.sendOtp({ newEmail: targetEmail });
       toast({
-        title: "Đã gửi lại",
-        description: "Mã OTP mới đã được gửi.",
+        title: t("toast.resendSuccess"),
+        description: t("toast.resendDesc"),
         type: "success",
       });
     } catch (error) {
       toast({
-        title: "Lỗi",
+        title: t("toast.error"),
         description: getErrorMessage(error),
         type: "error",
       });
@@ -106,15 +122,23 @@ export const useEmailVerification = () => {
     }
   };
 
+  const changeEmail = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("step");
+    router.replace(`${pathname}?${params.toString()}`);
+  };
+
   return {
     step,
-    setStep,
+    setStep: (s: 1 | 2) => {
+      if (s === 1) changeEmail();
+    },
     loading,
     targetEmail,
     emailForm,
     otpForm,
     onSendOtp,
     onVerifyOtp,
-    handleResendOtp
+    handleResendOtp,
   };
 };

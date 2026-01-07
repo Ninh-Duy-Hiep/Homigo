@@ -1,7 +1,7 @@
 import api from "@/lib/axios";
 import { ApiResponse } from "@/types/api";
-import { LoginSchemaType, RegisterGuestRequest } from "../types/schema";
-import { AuthResponse, SendOtpRequest, VerifyOtpRequest } from "../types";
+import { LoginSchemaType, RegisterGuestRequest } from "./auth.schema";
+import { AuthResponse, SendOtpRequest, VerifyOtpRequest } from "./auth.types";
 
 export const authApi = {
   login: async (data: LoginSchemaType) => {

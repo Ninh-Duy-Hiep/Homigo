@@ -102,7 +102,7 @@
         },
         "header": {
             "help": "Help",
-            "button": "Back to homepage" 
+            "button": "Back to homepage"
         },
         "modal": {
             "title": "You need to log in to register as a Host",
@@ -132,6 +132,32 @@
         "timeline": {
             "title": "Become a host in just a few steps",
             "description": "Register now to start <primary>earning extra income</primary>, sharing your unique living space, and <primary>meeting travelers</primary> from all over the world."
+        },
+        "validation": {
+            "emailRequired": "Email is required",
+            "emailInvalid": "Invalid email",
+            "otpLength": "OTP must be 6 digits"
+        },
+        "toast": {
+            "success": "Success",
+            "otpSent": "OTP has been sent to your email.",
+            "otpVerified": "Your email has been verified.",
+            "verifySuccess": "Verification successful",
+            "verifyFailed": "Verification failed",
+            "resendSuccess": "Resent",
+            "resendDesc": "A new OTP has been sent.",
+            "error": "Error"
+        },
+        "verification": {
+            "title": "Email Verification",
+            "description": "Please enter your email to receive a secure verification code.",
+            "emailLabel": "Email address",
+            "sendCode": "Send Code",
+            "change": "Change",
+            "enterCode": "Enter verification code",
+            "codeSentTo": "Code sent to",
+            "confirm": "Confirm",
+            "resendQuestion": "Resend code?"
         }
     }
 }

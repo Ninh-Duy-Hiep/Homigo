@@ -1,9 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
-import { authApi } from "../api";
+import { authApi } from "./auth.service";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useRouter } from "@/i18n/routing";
 import { getErrorMessage } from "@/lib/axios";
-import { LoginSchemaType } from "../types/schema";
+import { LoginSchemaType } from "./auth.schema";
 import { useToast } from "@/hooks/useToast";
 import { useTranslations } from "next-intl";
 

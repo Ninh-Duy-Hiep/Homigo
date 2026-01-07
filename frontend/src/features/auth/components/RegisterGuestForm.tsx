@@ -2,8 +2,8 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RegisterGuestSchema, RegisterGuestSchemaType } from "../types/schema";
-import { useRegisterGuest } from "../hooks/useAuthMutations";
+import { RegisterGuestSchema, RegisterGuestSchemaType } from "../auth.schema";
+import { useRegisterGuest } from "../auth.hooks";
 import { motion } from "motion/react";
 import { CustomInput } from "./ui";
 import { Eye, EyeOff, Mail, User, UserRoundPen } from "lucide-react";

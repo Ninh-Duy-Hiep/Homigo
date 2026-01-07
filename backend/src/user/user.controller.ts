@@ -2,7 +2,7 @@ import {
   Controller,
   Get,
   Body,
-  Patch,
+  Put,
   UseGuards,
   UseInterceptors,
   ClassSerializerInterceptor,
@@ -60,7 +60,7 @@ export class UsersController {
     return new UserEntity(user);
   }
 
-  @Patch('profile')
+  @Put('profile')
   @ApiOperation({ summary: 'Cập nhật hồ sơ' })
   @ApiResponse({ status: 200, description: 'Success or Request Submitted' })
   async updateProfile(
